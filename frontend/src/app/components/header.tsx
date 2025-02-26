@@ -1,24 +1,98 @@
 "use client";
 
+import type React from "react";
+
 import { useState } from "react";
 import Link from "next/link";
-import { Button, Modal } from "antd";
+import { Button, Modal, message } from "antd";
 import { Menu, X, Twitter, Linkedin, Instagram } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [authType, setAuthType] = useState<"login" | "signup">("login"); // Track modal type
+  const [authType, setAuthType] = useState<"login" | "signup">("login");
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Form state
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
 
   // Open the modal for login or signup
   const showAuthModal = (type: "login" | "signup") => {
     setAuthType(type);
     setIsAuthModalOpen(true);
+    // Reset form fields when opening modal
+    setEmail("");
+    setPassword("");
+    setUsername("");
   };
 
   // Close the modal
   const handleAuthModalCancel = () => {
     setIsAuthModalOpen(false);
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      if (authType === "login") {
+        // Login request
+        const response = await fetch("/api/auth/callback/credentials", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+            redirect: false,
+          }),
+        });
+
+        if (response.ok) {
+          message.success("Login successful!");
+          setIsAuthModalOpen(false);
+          router.push("/dashboard"); // Redirect to dashboard
+        } else {
+          const data = await response.json();
+          message.error(
+            data.error || "Login failed. Please check your credentials."
+          );
+        }
+      } else {
+        // Signup request
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: username,
+            email,
+            password,
+          }),
+        });
+
+        if (response.ok) {
+          message.success("Account created successfully! Please log in.");
+          setAuthType("login"); // Switch to login form
+        } else {
+          const data = await response.json();
+          message.error(data.error || "Registration failed. Please try again.");
+        }
+      }
+    } catch (error) {
+      console.error("Authentication error:", error);
+      message.error("An error occurred. Please try again later.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -205,7 +279,7 @@ export default function Header() {
         onCancel={handleAuthModalCancel}
         footer={null} // Remove default footer buttons
       >
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             {/* Email Input */}
             <div>
@@ -217,6 +291,8 @@ export default function Header() {
                 id="email"
                 className="w-full p-2 border rounded-md"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -231,6 +307,8 @@ export default function Header() {
                 id="password"
                 className="w-full p-2 border rounded-md"
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
@@ -246,15 +324,50 @@ export default function Header() {
                   id="username"
                   className="w-full p-2 border rounded-md"
                   placeholder="Choose a username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                 />
               </div>
             )}
 
             {/* Submit Button */}
-            <Button type="primary" htmlType="submit" block>
+            <Button type="primary" htmlType="submit" block loading={isLoading}>
               {authType === "login" ? "Log In" : "Sign Up"}
             </Button>
+
+            {/* Toggle between login and signup */}
+            <div className="text-center mt-4">
+              {authType === "login" ? (
+                <p>
+                  Don't have an account?{" "}
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setAuthType("signup");
+                    }}
+                    className="text-primary hover:underline"
+                  >
+                    Sign up
+                  </a>
+                </p>
+              ) : (
+                <p>
+                  Already have an account?{" "}
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setAuthType("login");
+                    }}
+                    className="text-primary hover:underline"
+                  >
+                    Log in
+                  </a>
+                </p>
+              )}
+            </div>
           </div>
         </form>
       </Modal>
