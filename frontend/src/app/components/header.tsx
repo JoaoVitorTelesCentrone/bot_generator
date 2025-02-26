@@ -2,11 +2,24 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Button } from "antd";
-import { Menu, X } from "lucide-react";
+import { Button, Modal } from "antd";
+import { Menu, X, Twitter, Linkedin, Instagram } from "lucide-react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authType, setAuthType] = useState<"login" | "signup">("login"); // Track modal type
+
+  // Open the modal for login or signup
+  const showAuthModal = (type: "login" | "signup") => {
+    setAuthType(type);
+    setIsAuthModalOpen(true);
+  };
+
+  // Close the modal
+  const handleAuthModalCancel = () => {
+    setIsAuthModalOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -65,12 +78,35 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
-          <Button>
-            <Link href="/login">Log In</Link>
-          </Button>
-          <Button>
-            <Link href="/signup">Sign Up</Link>
-          </Button>
+          {/* Social Media Icons */}
+          <Link
+            href="https://twitter.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500 hover:text-primary transition-colors"
+          >
+            <Twitter className="h-5 w-5" />
+          </Link>
+          <Link
+            href="https://linkedin.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500 hover:text-primary transition-colors"
+          >
+            <Linkedin className="h-5 w-5" />
+          </Link>
+          <Link
+            href="https://instagram.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-500 hover:text-primary transition-colors"
+          >
+            <Instagram className="h-5 w-5" />
+          </Link>
+
+          {/* Auth Buttons */}
+          <Button onClick={() => showAuthModal("login")}>Log In</Button>
+          <Button onClick={() => showAuthModal("signup")}>Sign Up</Button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -120,16 +156,108 @@ export default function Header() {
               About
             </Link>
             <div className="flex flex-col space-y-2 pt-2">
-              <Button className="w-full">
-                <Link href="/login">Log In</Link>
+              <Button className="w-full" onClick={() => showAuthModal("login")}>
+                Log In
               </Button>
-              <Button className="w-full">
-                <Link href="/signup">Sign Up</Link>
+              <Button
+                className="w-full"
+                onClick={() => showAuthModal("signup")}
+              >
+                Sign Up
               </Button>
+            </div>
+
+            {/* Social Media Icons (Mobile) */}
+            <div className="flex items-center gap-4 pt-4">
+              <Link
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-primary transition-colors"
+              >
+                <Twitter className="h-5 w-5" />
+              </Link>
+              <Link
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-primary transition-colors"
+              >
+                <Linkedin className="h-5 w-5" />
+              </Link>
+              <Link
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-primary transition-colors"
+              >
+                <Instagram className="h-5 w-5" />
+              </Link>
             </div>
           </nav>
         </div>
       )}
+
+      {/* Auth Modal */}
+      <Modal
+        title={authType === "login" ? "Log In" : "Sign Up"}
+        open={isAuthModalOpen}
+        onCancel={handleAuthModalCancel}
+        footer={null} // Remove default footer buttons
+      >
+        <form>
+          <div className="space-y-4">
+            {/* Email Input */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="w-full p-2 border rounded-md"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            {/* Password Input */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="w-full p-2 border rounded-md"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            {/* Sign Up Additional Field */}
+            {authType === "signup" && (
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  className="w-full p-2 border rounded-md"
+                  placeholder="Choose a username"
+                  required
+                />
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <Button type="primary" htmlType="submit" block>
+              {authType === "login" ? "Log In" : "Sign Up"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </header>
   );
 }

@@ -8,6 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        // Primary: Steel/Metal tone
+        primary: "#6B7280", // Steel gray
+        // Secondary: White
+        secondary: "#FFFFFF", // Pure white
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -17,4 +23,5 @@ const config: Config = {
   },
   plugins: [],
 };
+
 export default config;

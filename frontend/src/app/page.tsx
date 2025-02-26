@@ -9,7 +9,7 @@ import Testimonials from "./components/testimonials";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-primary bg-opacity-40">
       <Header />
       <main>
         <Hero />
