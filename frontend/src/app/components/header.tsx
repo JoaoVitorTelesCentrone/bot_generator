@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import Link from "next/link";
 import { Button, Modal, message } from "antd";
@@ -43,7 +42,7 @@ export default function Header() {
     try {
       if (authType === "login") {
         // Login request
-        const response = await fetch("/api/auth/callback/credentials", {
+        const response = await fetch("/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -51,16 +50,21 @@ export default function Header() {
           body: JSON.stringify({
             email,
             password,
-            redirect: false,
           }),
         });
+
+        const data = await response.json();
 
         if (response.ok) {
           message.success("Login successful!");
           setIsAuthModalOpen(false);
-          router.push("/dashboard"); // Redirect to dashboard
+
+          // Store the token in local storage
+          localStorage.setItem("token", data.token);
+
+          // Redirect to dashboard
+          router.push("/dashboard");
         } else {
-          const data = await response.json();
           message.error(
             data.error || "Login failed. Please check your credentials."
           );
@@ -73,17 +77,18 @@ export default function Header() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            name: username,
             email,
             password,
+            username, // Include username if needed
           }),
         });
+
+        const data = await response.json();
 
         if (response.ok) {
           message.success("Account created successfully! Please log in.");
           setAuthType("login"); // Switch to login form
         } else {
-          const data = await response.json();
           message.error(data.error || "Registration failed. Please try again.");
         }
       }
@@ -326,7 +331,6 @@ export default function Header() {
                   placeholder="Choose a username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  required
                 />
               </div>
             )}

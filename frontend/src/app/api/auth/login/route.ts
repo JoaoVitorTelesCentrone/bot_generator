@@ -6,10 +6,12 @@ import jwt from 'jsonwebtoken';
 export async function POST(request: Request) {
     const { email, password } = await request.json();
 
+    // Validate input
     if (!email || !password) {
         return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
+    // Find the user
     const user = await prisma.user.findUnique({
         where: { email },
     });
@@ -18,12 +20,14 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
+    // Validate password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
         return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
+    // Generate JWT token
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: '1h' });
 
     return NextResponse.json({ token }, { status: 200 });
