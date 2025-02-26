@@ -1,59 +1,26 @@
-import { NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
-import bcrypt from "bcryptjs"
-import { z } from "zod"
-
-const prisma = new PrismaClient()
-
-// Schema validation for user registration
-const registerSchema = z.object({
-    name: z.string().min(1, "Name is required"),
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-})
+import { NextResponse } from 'next/server';
+import prisma from '@/app/lib/prisma';
+import bcrypt from 'bcryptjs';
 
 export async function POST(request: Request) {
+    const { email, password } = await request.json();
+
+    if (!email || !password) {
+        return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     try {
-        const body = await request.json()
-        const validatedData = registerSchema.parse(body)
-
-        // Check if user already exists
-        const existingUser = await prisma.user.findUnique({
-            where: {
-                email: validatedData.email,
-            },
-        })
-
-        if (existingUser) {
-            return NextResponse.json({ error: "User with this email already exists" }, { status: 400 })
-        }
-
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(validatedData.password, 10)
-
-        // Create the user
         const user = await prisma.user.create({
             data: {
-                name: validatedData.name,
-                email: validatedData.email,
+                email,
                 password: hashedPassword,
             },
-            select: {
-                id: true,
-                name: true,
-                email: true,
-                createdAt: true,
-            },
-        })
+        });
 
-        return NextResponse.json({ message: "User registered successfully", user }, { status: 201 })
+        return NextResponse.json({ user }, { status: 201 });
     } catch (error) {
-        if (error instanceof z.ZodError) {
-            return NextResponse.json({ error: error.errors }, { status: 400 })
-        }
-
-        console.error("Registration error:", error)
-        return NextResponse.json({ error: "Failed to register user" }, { status: 500 })
+        return NextResponse.json({ error: 'User already exists' }, { status: 400 });
     }
 }
-
