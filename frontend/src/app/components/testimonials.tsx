@@ -30,7 +30,6 @@ export default function Testimonials() {
                 ))}
               </div>
               <p className="text-muted-foreground">
-                // eslint-disable-next-line react/no-unescaped-entities
                 "BotBuilder has transformed our customer service. We've reduced
                 response times by 80% while maintaining high customer
                 satisfaction."
@@ -115,22 +114,6 @@ export default function Testimonials() {
                 </p>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className="mx-auto max-w-5xl">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="flex items-center justify-center p-4">
-                <Image
-                  src="/placeholder-logo.svg"
-                  width={120}
-                  height={60}
-                  alt={`Company logo ${i + 1}`}
-                  className="max-h-12 w-auto opacity-70 grayscale transition-all hover:opacity-100 hover:grayscale-0"
-                />
-              </div>
-            ))}
           </div>
         </div>
       </div>

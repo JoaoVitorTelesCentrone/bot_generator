@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="w-full py-12 md:py-24 lg:py-32">
+    <section id="pricing" className="w-full py-6 md:py-4 lg:py-6">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
@@ -17,7 +17,7 @@ export default function Pricing() {
             </h2>
             <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed">
               Choose the plan that's right for your business. All plans include
-              a 14-day free trial.
+              a 7-day free trial.
             </p>
           </div>
         </div>
@@ -155,17 +155,6 @@ export default function Pricing() {
               </Button>
             </div>
           </div>
-        </div>
-
-        <div className="mx-auto max-w-3xl rounded-lg border bg-muted/50 p-6 text-center">
-          <h3 className="text-xl font-bold">Need a custom solution?</h3>
-          <p className="mt-2 text-muted-foreground">
-            Our team can help you design a custom plan that fits your specific
-            requirements.
-          </p>
-          <Button className="mt-4">
-            <Link href="/contact">Contact Our Sales Team</Link>
-          </Button>
         </div>
       </div>
     </section>

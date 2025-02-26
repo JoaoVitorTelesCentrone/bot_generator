@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Button } from "antd";
 import Image from "next/image";
+import img from "../assets/hero1.jpg";
 
 export default function Hero() {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+    <section className="w-full py-6 md:py-12 lg:py-12 xl:py-12">
       <div className="container px-4 md:px-6">
         <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
           <div className="flex flex-col justify-center space-y-4">
@@ -55,14 +56,14 @@ export default function Hero() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span>14-day free trial</span>
+                <span>7-day free trial</span>
               </div>
             </div>
           </div>
           <div className="flex items-center justify-center">
             <div className="relative w-full h-[400px] lg:h-[500px] overflow-hidden rounded-xl border bg-background p-2 shadow-lg">
               <Image
-                src="/placeholder.svg?height=500&width=400"
+                src={img}
                 width={400}
                 height={500}
                 alt="Bot builder interface preview"

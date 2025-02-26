@@ -1,9 +1,13 @@
 import Image from "next/image";
 import { CheckCircle } from "lucide-react";
 
+import img1 from "../assets/how1.jpg";
+import img2 from "../assets/how4.jpg";
+import img3 from "../assets/how6.jpg";
+
 export default function HowItWorks() {
   return (
-    <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32">
+    <section id="how-it-works" className="w-full py-6 md:py-6 lg:py-6">
       <div className="container px-4 md:px-6">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
@@ -31,7 +35,7 @@ export default function HowItWorks() {
               bot responses.
             </p>
             <Image
-              src="/placeholder.svg?height=200&width=300"
+              src={img1}
               width={300}
               height={200}
               alt="Bot design interface"
@@ -49,7 +53,7 @@ export default function HowItWorks() {
               your bot.
             </p>
             <Image
-              src="/placeholder.svg?height=200&width=300"
+              src={img2}
               width={300}
               height={200}
               alt="Bot training interface"
@@ -67,7 +71,7 @@ export default function HowItWorks() {
               with analytics.
             </p>
             <Image
-              src="/placeholder.svg?height=200&width=300"
+              src={img3}
               width={300}
               height={200}
               alt="Bot deployment interface"
@@ -77,10 +81,10 @@ export default function HowItWorks() {
         </div>
 
         <div className="mx-auto max-w-3xl space-y-4 text-center">
-          <h3 className="text-2xl font-bold">
+          <h3 className="text-4xl font-bold">
             Why businesses choose BotBuilder
           </h3>
-          <ul className="grid gap-2 sm:grid-cols-2">
+          <ul className="grid gap-2 sm:grid-cols-3 ">
             <li className="flex items-center space-x-2">
               <CheckCircle className="h-5 w-5 text-primary" />
               <span>No coding required</span>
@@ -91,7 +95,7 @@ export default function HowItWorks() {
             </li>
             <li className="flex items-center space-x-2">
               <CheckCircle className="h-5 w-5 text-primary" />
-              <span>Reduce support costs by 60%</span>
+              <span>Reduce support costs</span>
             </li>
             <li className="flex items-center space-x-2">
               <CheckCircle className="h-5 w-5 text-primary" />

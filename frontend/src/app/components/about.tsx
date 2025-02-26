@@ -1,5 +1,10 @@
 import Image from "next/image";
 
+import img1 from "../assets/about1.jpg";
+import img2 from "../assets/about2.jpg";
+import img3 from "../assets/abou3.jpeg";
+import img4 from "../assets/about4.jpg";
+
 export default function About() {
   return (
     <section id="about" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
@@ -51,28 +56,28 @@ export default function About() {
           <div className="flex items-center justify-center">
             <div className="grid gap-6 sm:grid-cols-2">
               <Image
-                src="/placeholder.svg?height=300&width=250"
+                src={img1}
                 width={250}
                 height={300}
                 alt="Team member"
                 className="mx-auto aspect-[3/4] overflow-hidden rounded-xl object-cover object-center sm:aspect-[4/5]"
               />
               <Image
-                src="/placeholder.svg?height=300&width=250"
+                src={img2}
                 width={250}
                 height={300}
                 alt="Team member"
                 className="mx-auto aspect-[3/4] overflow-hidden rounded-xl object-cover object-center sm:aspect-[4/5] sm:translate-y-10"
               />
               <Image
-                src="/placeholder.svg?height=300&width=250"
+                src={img3}
                 width={250}
                 height={300}
                 alt="Team member"
                 className="mx-auto aspect-[3/4] overflow-hidden rounded-xl object-cover object-center sm:aspect-[4/5] sm:translate-y-5"
               />
               <Image
-                src="/placeholder.svg?height=300&width=250"
+                src={img4}
                 width={250}
                 height={300}
                 alt="Team member"
