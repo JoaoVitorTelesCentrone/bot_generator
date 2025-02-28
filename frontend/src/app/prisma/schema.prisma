@@ -3,14 +3,64 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql" // or "mysql", "sqlite", "sqlserver"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model user {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  bots          Bot[]
+
+  @@map("users")
 }
+
+model Bot {
+  id             String         @id @default(cuid())
+  name           String
+  description    String?
+  welcomeMessage String?        @map("welcome_message")
+  primaryColor   String?        @map("primary_color")
+  isActive       Boolean        @default(true) @map("is_active")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  userId         String         @map("user_id")
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channels       Channel[]
+  trainingData   TrainingData[]
+
+  @@map("bots")
+}
+
+model Channel {
+  id        String   @id @default(cuid())
+  type      String // web, whatsapp, messenger, telegram
+  config    Json     @default("{}")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  botId     String   @map("bot_id")
+  bot       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@map("channels")
+}
+
+model TrainingData {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String
+  category  String   @default("General")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  botId     String   @map("bot_id")
+  bot       Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@map("training_data")
+}
+

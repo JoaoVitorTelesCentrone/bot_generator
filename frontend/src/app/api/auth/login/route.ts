@@ -1,7 +1,11 @@
+import { atom } from 'jotai';
 import { NextResponse } from 'next/server';
 import prisma from '@/app/lib/prisma';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
+// Atoms for authentication state
+const authAtom = atom({ user: null, isAuthenticated: false });
 
 export async function POST(request: Request) {
     const { email, password } = await request.json();
@@ -32,3 +36,5 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ token }, { status: 200 });
 }
+
+export default authAtom;
